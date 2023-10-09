@@ -1,0 +1,35 @@
+# cmake command with optional parameters used
+# to compile OPENCV 4.5 from source on UBUNTU 20.04
+# with NVIDIA 1080TI GPU and CUDA TOOLKIT 11.6
+#
+# NOTE: target python was a virtual environment's python executable...
+#       seems to work fine when reused in other venvs, but
+#       wonder if compiling against the system's default python
+#       is more logical, since a venv's python instance is
+#       inherently more volatile than the system's python3
+
+
+-- cmake command with params --
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D INSTALL_PYTHON_EXAMPLES=ON -D INSTALL_C_EXAMPLES=OFF -D OPENCV_ENABLE_NONFREE=ON -D OPENCV_EXTRA_MODULES_PATH=/home/user/gitbucket/opencv_contrib-4.5.5/modules -D PYTHON_EXECUTABLE=/home/user/gitbucket/opencv_dev/bin/python3 -D BUILD_EXAMPLES=ON ..
+
+
+# OPENCV 4.X CMAKE CONFIGURATION PARAMETER REFERENCE:
+https://docs.opencv.org/4.x/db/d05/tutorial_config_reference.html
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+-- RECYCLE COMPILED OPENCV IN ARBITRARY PYTHON VIRTUAL ENVIRONMENT
+
+# to reuse previously compiled OPENCV in a new virtual environment,
+# symlink to the compiled cv2.{xxx}.so object in /usr/local
+# (or wherever opencv was configured to install to)
+# from the python site-packages dir in the venv
+
+# abstract example path to symlink into
+{path/to/virtual/env}/lib/{pythonX.X}/site-packages
+
+# CLI commands for distinct virtual env:
+cd /home/user/gitbucket/pipenv_opencv/.venv/lib/python3.8/site-packages
+ln -s /usr/local/lib/python3.8/site-packages/cv2/python-3.8/cv2.cpython-38-x86_64-linux-gnu.so cv2.so
+
